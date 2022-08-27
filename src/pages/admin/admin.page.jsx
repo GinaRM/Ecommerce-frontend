@@ -1,27 +1,27 @@
-import {useEffect, useRef, useState} from "react";
-import ProductService from "../../services/product.service";
-import {ProductSave} from "../../components/product-save";
-import Product from "../../models/product";
-import {ProductDelete} from "../../components/product-delete";
+import { useEffect, useRef, useState } from 'react';
+import ProductService from '../../services/product.service';
+import { ProductSave } from '../../components/product-save';
+import Product from '../../models/product';
+import { ProductDelete } from '../../components/product-delete';
+
 
 const AdminPage = () => {
 
     const [productList, setProductList] = useState([]);
-    const [selectedProduct, setSelectedProduct] = useState(new Product ('','',0));
+    const [selectedProduct, setSelectedProduct] = useState(new Product('', '', 0));
     const [errorMessage, setErrorMessage] = useState('');
 
     const saveComponent = useRef();
     const deleteComponent = useRef();
 
-    //mounted
     useEffect(() => {
         ProductService.getAllProducts().then((response) => {
-            setProductList(response.data)
-        })
+            setProductList(response.data);
+        });
     }, []);
-    
+
     const createProductRequest = () => {
-        setSelectedProduct(new Product('','',0));
+        setSelectedProduct(new Product('', '', 0));
         saveComponent.current?.showProductModal();
     };
 
@@ -29,18 +29,18 @@ const AdminPage = () => {
         setSelectedProduct(Object.assign({}, item));
         saveComponent.current?.showProductModal();
     };
-    
+
     const deleteProductRequest = (product) => {
         setSelectedProduct(product);
         deleteComponent.current?.showDeleteModal();
-      
     };
 
     const saveProductWatcher = (product) => {
         let itemIndex = productList.findIndex(item => item.id === product.id);
-        if (itemIndex !== -1){
+
+        if (itemIndex !== -1) {
             const newList = productList.map((item) => {
-                if(item.id === product.id){
+                if (item.id === product.id) {
                     return product;
                 }
                 return item;
@@ -54,22 +54,22 @@ const AdminPage = () => {
 
     const deleteProduct = () => {
         ProductService.deleteProduct(selectedProduct).then(_ => {
-            setProductList(productList.filter( x => x.id !== selectedProduct.id));
+            setProductList(productList.filter(x => x.id !== selectedProduct.id));
         }).catch(err => {
             setErrorMessage('Unexpected error occurred.');
             console.log(err);
-        })
+        });
+    };
 
-    }
-    
-    return(
+    return (
         <div>
             <div className="container">
                 <div className="pt-5">
-                    {errorMessage && <div className="alert alert-danger">
-                        {errorMessage}
 
-                    </div>
+                    {errorMessage &&
+                        <div className="alert alert-danger">
+                            {errorMessage}
+                        </div>
                     }
 
                     <div className="card">
@@ -91,6 +91,7 @@ const AdminPage = () => {
                         </div>
                         <div className="card-body">
                             <table className="table table-striped">
+
                                 <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -101,6 +102,7 @@ const AdminPage = () => {
                                 </tr>
                                 </thead>
                                 <tbody>
+
                                 {productList.map((item, ind) =>
                                     <tr key={item.id}>
                                         <th scope="row">{ind + 1}</th>
@@ -119,15 +121,18 @@ const AdminPage = () => {
                                 )}
 
 
-                                </tbody>   
+                                </tbody>
 
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
+
             <ProductSave ref={saveComponent} product={selectedProduct} onSaved={(p) => saveProductWatcher(p)}/>
-            <ProductDelete ref={deleteComponent} onConfirmed ={() => deleteProduct()}/>
+            <ProductDelete ref={deleteComponent} onConfirmed={() => deleteProduct()}/>
+
         </div>
     );
 };

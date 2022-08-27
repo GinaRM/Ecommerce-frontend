@@ -53,7 +53,7 @@ const HomePage = () => {
                 {productList.map((item, ind) =>
                     <div key={item.id} className="card m-3 home-card">
                         <div className="card-body">
-                            <card className="card-title text-uppercase">{item.name}</card>
+                            <div className="card-title text-uppercase">{item.name}</div>
                             <div className="card-subtitle text-muted">{item.description}</div>
                         </div>
                         
