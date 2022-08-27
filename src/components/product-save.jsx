@@ -39,7 +39,7 @@ const ProductSave = forwardRef((props, ref) => {
             setSubmitted(false);
 
         }).catch(err => {
-            setErrorMessage('Unexpected error occurred.2');
+            setErrorMessage('Unexpected error occurred.');
             console.log(err);
         });
     };

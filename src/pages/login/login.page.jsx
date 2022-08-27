@@ -6,6 +6,7 @@ import AuthenticationService from "../../services/authentication.service";
 import {setCurrentUser} from "../../store/actions/user";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faUserCircle} from "@fortawesome/free-solid-svg-icons";
+import {Role} from "../../models/role";
 
 const LoginPage = () => {
     const [user, setUser] = useState(new User('', '', ''));
@@ -21,11 +22,13 @@ const LoginPage = () => {
 
     //mounted
     useEffect(() => {
-        if (currentUser?.id) {
-            //navigate
+        if (currentUser?.id && currentUser.role === Role.USER) {
+
             navigate('/profile');
+        } else if (currentUser?.id && currentUser.role === Role.ADMIN) {
+            navigate('/admin')
         }
-    }, []);
+    });
 
 
     const handleChange = (e) => {
